@@ -1,0 +1,70 @@
+/* ===== Mobile menu (tempel di akhir main.css) ===== */
+
+/* Tombol hamburger */
+.burger {
+    display: none; flex: none; position: relative; padding: 0;
+    width: 46px; height: 46px; cursor: pointer;
+    background: var(--yellow); border: 2px solid var(--ink); border-radius: 50%;
+    box-shadow: 0 3px 0 var(--ink);
+    transition: transform .15s, box-shadow .15s;
+}
+.burger:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--ink); }
+.burger span {
+    position: absolute; left: 12px; right: 12px; height: 2px;
+    background: var(--ink); border-radius: 2px;
+    transition: top .3s, transform .3s, opacity .2s;
+}
+.burger span:nth-child(1) { top: 14px; }
+.burger span:nth-child(2) { top: 20px; }
+.burger span:nth-child(3) { top: 26px; }
+.burger[aria-expanded="true"] span:nth-child(1) { top: 20px; transform: rotate(45deg); }
+.burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.burger[aria-expanded="true"] span:nth-child(3) { top: 20px; transform: rotate(-45deg); }
+
+/* Overlay gelap */
+.m-overlay {
+    position: fixed; inset: 0; z-index: 18;
+    background: rgba(29, 29, 29, .45);
+    opacity: 0; visibility: hidden;
+    transition: opacity .3s, visibility .3s;
+}
+
+/* Panel menu (geser dari kanan) */
+.m-menu {
+    position: fixed; right: 0; bottom: 0; top: 84px; z-index: 19;
+    width: min(340px, 86vw);
+    display: flex; flex-direction: column; overflow-y: auto;
+    padding: 12px 24px 32px;
+    background: var(--white);
+    border-left: 1px solid #eee;
+    box-shadow: -12px 0 30px rgba(0, 0, 0, .1);
+    transform: translateX(100%); visibility: hidden;
+    transition: transform .35s cubic-bezier(.22, 1, .36, 1), visibility .35s;
+}
+.m-menu a:not(.btn) {
+    display: block; padding: 16px 4px; font-size: 18px; color: #555;
+    border-bottom: 1px solid #eee;
+    opacity: 0; transform: translateX(24px);
+    transition: opacity .35s, transform .35s, color .2s;
+}
+.m-menu a.on, .m-menu a:not(.btn):hover { color: var(--maroon); font-weight: 600; }
+.m-menu .btn { margin-top: 24px; }
+
+/* Terbuka */
+.m-open .m-overlay { opacity: 1; visibility: visible; }
+.m-open .m-menu { transform: none; visibility: visible; }
+.m-open .m-menu a:not(.btn) { opacity: 1; transform: none; }
+.m-open .m-menu a:nth-child(1) { transition-delay: .08s; }
+.m-open .m-menu a:nth-child(2) { transition-delay: .13s; }
+.m-open .m-menu a:nth-child(3) { transition-delay: .18s; }
+.m-open .m-menu a:nth-child(4) { transition-delay: .23s; }
+.m-open .m-menu a:nth-child(5) { transition-delay: .28s; }
+
+/* Breakpoint */
+@media (max-width: 900px) { .burger { display: block; } }
+@media (max-width: 560px) { .nav-cta { display: none; } } /* tombol "Pesan" pindah ke panel */
+@media (min-width: 901px) { .m-overlay, .m-menu { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+    .burger, .burger span, .m-overlay, .m-menu, .m-menu a { transition: none !important; }
+}
