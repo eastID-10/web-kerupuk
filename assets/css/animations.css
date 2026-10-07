@@ -1,50 +1,39 @@
-/* Lenis smooth scroll essentials */
+/* ===== animations.css (disesuaikan dengan halaman Putri Indrasari) ===== */
+
+/* Lenis */
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
 .lenis.lenis-stopped { overflow: hidden; }
 
-/* Scroll progress bar */
+/* Progress bar scroll */
 .scroll-progress {
   position: fixed; top: 0; left: 0; width: 100%; height: 4px;
   transform-origin: 0 50%; transform: scaleX(0);
-  background: linear-gradient(90deg, #f97316, #facc15);
+  background: linear-gradient(90deg, #f97316, #fdc12e);
   z-index: 9999; pointer-events: none;
 }
 
-/* Lottie holders */
+/* Wadah Lottie */
 .lot { position: absolute; pointer-events: none; z-index: 3; }
-.hero-visual { position: relative; }
-.feature-icon { position: relative; }
+.why .ico, .cta-band .wrap { position: relative; }
 
-/* Word-split reveal */
+/* Pemisah kata untuk reveal judul */
 .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .12em; margin-bottom: -.12em; }
 .wi { display: inline-block; will-change: transform; }
 
-/* Ambient loops (use individual transform props so they never fight GSAP/AOS) */
-@keyframes floaty { 50% { translate: 0 -14px; } }
-@keyframes spin { to { rotate: 360deg; } }
-@keyframes pulse-ring {
-  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, .5); }
-  70% { box-shadow: 0 0 0 16px rgba(37, 211, 102, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-}
+/* Tombol: efek magnetik lewat properti `translate` (tidak bentrok dengan :hover transform) */
+.btn { transition: transform .15s, box-shadow .15s, translate .25s ease-out; }
+
+/* Hover kecil-kecil (pakai properti individual agar aman dari GSAP) */
 @keyframes wiggle { 25% { rotate: -12deg; } 50% { rotate: 10deg; } 75% { rotate: -6deg; } }
-@keyframes dot-pulse { 50% { scale: 1.6; } }
-
-.hero-decorative-circle { animation: spin 40s linear infinite; }
-.hero-product-img { animation: floaty 5s ease-in-out infinite; }
-.badge-halal { animation: floaty 4s ease-in-out infinite; }
-.badge-quality { animation: floaty 4.5s ease-in-out .8s infinite reverse; }
-.btn-whatsapp { animation: pulse-ring 2.4s infinite; }
-.feature-item:hover .feature-icon,
-.about-highlight-item:hover .about-highlight-icon { animation: wiggle .6s; }
-.badge-dot { animation: dot-pulse 1.6s ease-in-out infinite; }
-
-/* GSAP drives the image tilt, so drop CSS transitions on it */
-.product-card-image { overflow: hidden; }
-.product-card-image img { transition: none !important; will-change: transform; }
+.why .item:hover .ico { animation: wiggle .6s; }
+.tcard { transition: translate .3s ease, box-shadow .3s ease; }
+.tcard:hover { translate: 0 -8px; box-shadow: 0 16px 40px rgba(0, 0, 0, .14); }
+.card h3 { transition: color .2s; }
+.card:hover h3 { color: var(--maroon); }
+.card .stage img { will-change: transform; }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
 }

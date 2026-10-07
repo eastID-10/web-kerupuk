@@ -1,4 +1,7 @@
-/* ===== Mobile menu (tempel di akhir main.css) ===== */
+/* ===== Mobile menu v2 (ganti seluruh isi mobile-menu.css) ===== */
+
+/* Kunci scroll tanpa menyentuh <body> (aman untuk navbar sticky) */
+html.m-open { overflow: hidden; }
 
 /* Tombol hamburger */
 .burger {
@@ -21,7 +24,7 @@
 .burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
 .burger[aria-expanded="true"] span:nth-child(3) { top: 20px; transform: rotate(-45deg); }
 
-/* Overlay gelap */
+/* Overlay */
 .m-overlay {
     position: fixed; inset: 0; z-index: 18;
     background: rgba(29, 29, 29, .45);
@@ -29,40 +32,45 @@
     transition: opacity .3s, visibility .3s;
 }
 
-/* Panel menu (geser dari kanan) */
+/* Panel: kartu ringkas yang menempel di bawah navbar (tinggi mengikuti isi) */
 .m-menu {
-    position: fixed; right: 0; bottom: 0; top: 84px; z-index: 19;
-    width: min(340px, 86vw);
-    display: flex; flex-direction: column; overflow-y: auto;
-    padding: 12px 24px 32px;
+    position: fixed; right: 0; top: var(--m-top, 84px); z-index: 19;
+    width: min(300px, 82vw);
+    max-height: calc(100vh - var(--m-top, 84px) - 16px);
+    max-height: calc(100dvh - var(--m-top, 84px) - 16px);
+    display: flex; flex-direction: column;
+    overflow-y: auto; overscroll-behavior: contain;
+    padding: 6px 20px 20px;
     background: var(--white);
-    border-left: 1px solid #eee;
-    box-shadow: -12px 0 30px rgba(0, 0, 0, .1);
+    border: 1px solid #eee; border-top: 0; border-right: 0;
+    border-radius: 0 0 0 24px;
+    box-shadow: -10px 14px 30px rgba(0, 0, 0, .12);
     transform: translateX(100%); visibility: hidden;
     transition: transform .35s cubic-bezier(.22, 1, .36, 1), visibility .35s;
 }
 .m-menu a:not(.btn) {
-    display: block; padding: 16px 4px; font-size: 18px; color: #555;
+    display: block; padding: 14px 4px;
+    font-size: clamp(15px, 4.2vw, 17px); color: #555;
     border-bottom: 1px solid #eee;
-    opacity: 0; transform: translateX(24px);
+    opacity: 0; transform: translateX(20px);
     transition: opacity .35s, transform .35s, color .2s;
 }
 .m-menu a.on, .m-menu a:not(.btn):hover { color: var(--maroon); font-weight: 600; }
-.m-menu .btn { margin-top: 24px; }
+.m-menu .btn { margin-top: 18px; padding: 11px 20px; font-size: 14px; }
 
 /* Terbuka */
 .m-open .m-overlay { opacity: 1; visibility: visible; }
 .m-open .m-menu { transform: none; visibility: visible; }
 .m-open .m-menu a:not(.btn) { opacity: 1; transform: none; }
-.m-open .m-menu a:nth-child(1) { transition-delay: .08s; }
-.m-open .m-menu a:nth-child(2) { transition-delay: .13s; }
-.m-open .m-menu a:nth-child(3) { transition-delay: .18s; }
-.m-open .m-menu a:nth-child(4) { transition-delay: .23s; }
-.m-open .m-menu a:nth-child(5) { transition-delay: .28s; }
+.m-open .m-menu a:nth-child(1) { transition-delay: .06s; }
+.m-open .m-menu a:nth-child(2) { transition-delay: .10s; }
+.m-open .m-menu a:nth-child(3) { transition-delay: .14s; }
+.m-open .m-menu a:nth-child(4) { transition-delay: .18s; }
+.m-open .m-menu a:nth-child(5) { transition-delay: .22s; }
 
 /* Breakpoint */
 @media (max-width: 900px) { .burger { display: block; } }
-@media (max-width: 560px) { .nav-cta { display: none; } } /* tombol "Pesan" pindah ke panel */
+@media (max-width: 560px) { .nav-cta { display: none; } }
 @media (min-width: 901px) { .m-overlay, .m-menu { display: none; } }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,5 +1,4 @@
-/* Mobile menu: otomatis membuat hamburger + panel dari `nav .links` yang sudah ada.
-   Tidak perlu mengubah HTML. */
+/* Mobile menu v2: hamburger + panel otomatis dari `nav .links`. Tidak perlu ubah HTML. */
 (() => {
   const nav = document.querySelector('nav');
   const links = nav && nav.querySelector('.links');
@@ -17,21 +16,24 @@
   burger.setAttribute('aria-controls', 'm-menu');
   burger.innerHTML = '<span></span><span></span><span></span>';
 
-  /* Panel + overlay */
+  /* Overlay + panel */
   const overlay = document.createElement('div');
   overlay.className = 'm-overlay';
-
   const menu = document.createElement('div');
   menu.className = 'm-menu';
   menu.id = 'm-menu';
+  // Biar Lenis (smooth scroll) tidak ikut menggulung halaman saat menu terbuka
+  overlay.setAttribute('data-lenis-prevent', '');
+  menu.setAttribute('data-lenis-prevent', '');
 
-  const strip = el => { el.removeAttribute('id'); return el; }; // hindari id ganda
+  const strip = el => { el.removeAttribute('id'); return el; };
   links.querySelectorAll('a').forEach(a => menu.appendChild(strip(a.cloneNode(true))));
 
   const cta = nav.querySelector('.btn');
   if (cta) {
     const c = strip(cta.cloneNode(true));
-    cta.classList.add('nav-cta');           // disembunyikan di layar kecil
+    cta.classList.add('nav-cta');
+    c.classList.remove('nav-cta');
     c.classList.add('block');
     menu.appendChild(c);
   }
@@ -39,25 +41,29 @@
   wrap.appendChild(burger);
   document.body.append(overlay, menu);
 
-  /* Buka / tutup */
+  /* Buka / tutup (kunci scroll lewat class di <html>, bukan <body>) */
+  const isOpen = () => html.classList.contains('m-open');
   const setOpen = open => {
-    menu.style.top = nav.getBoundingClientRect().bottom + 'px';
+    if (open) menu.style.setProperty('--m-top', Math.max(nav.getBoundingClientRect().bottom, 0) + 'px');
     html.classList.toggle('m-open', open);
     burger.setAttribute('aria-expanded', String(open));
     burger.setAttribute('aria-label', open ? 'Tutup menu' : 'Buka menu');
-    document.body.style.overflow = open ? 'hidden' : '';
   };
-  const isOpen = () => html.classList.contains('m-open');
 
   burger.addEventListener('click', () => setOpen(!isOpen()));
   overlay.addEventListener('click', () => setOpen(false));
-  menu.addEventListener('click', e => { if (e.target.closest('a')) setOpen(false); });
+
+  // Capture di document: tetap jalan walau skrip lain memanggil stopPropagation() pada klik anchor
+  document.addEventListener('click', e => {
+    if (isOpen() && e.target.closest('.m-menu a')) setOpen(false);
+  }, true);
+
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && isOpen()) { setOpen(false); burger.focus(); }
   });
   matchMedia('(min-width: 901px)').addEventListener('change', e => { if (e.matches) setOpen(false); });
 
-  /* Highlight menu aktif saat scroll (desktop + mobile) */
+  /* Highlight menu aktif saat scroll */
   const all = [...links.querySelectorAll('a'), ...menu.querySelectorAll('a:not(.btn)')];
   const ids = [...new Set(all.map(a => a.getAttribute('href')).filter(h => h && h.length > 1 && h[0] === '#'))];
   const io = new IntersectionObserver(entries => entries.forEach(e => {
